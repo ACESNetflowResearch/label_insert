@@ -3,7 +3,7 @@ require 'mysql'
 
 begin
     con = Mysql.new 'localhost', 'root', 'cyberaces', 'netflow_db'
-    while ((inp = gets) != "finished")
+    while ((inp = $stdin.gets) != "finished")
 	   #split on the commas
 	   split_arr = inp.split(",")
 	   if (split_arr != []) then  
@@ -11,9 +11,9 @@ begin
 		  ip_field = split_arr[0].gsub(/[\'\(\"]/, "");
 		  if (ip_field =~/\d+.\d+.\d+/) then
 			 #malicious or benign label
-			 label = if (split_arr[18] = "RAW_NETFLOW") then "TRUE" else "FALSE" end; 
-			 puts ip_field + "," + split_arr[18]
-			 con.query("INSERT INTO `ip_labels_2` (`ip`, `label`) VALUES (INET_ATON(\"#{ip_field}\"), #{label});") 
+			 label = if (split_arr[18] == "RAW_NETFLOW") then "TRUE" else "FALSE" end; 
+			 puts ip_field + "," + label
+#			 con.query("INSERT INTO `#{ARGV[0]}` (`ip`, `label`) VALUES (INET_ATON(\"#{ip_field}\"), #{label});") 
 		  end
 	   end
     end
